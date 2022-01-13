@@ -3,13 +3,8 @@ package dev.oxeg.gameservice.userfriends;
 import java.util.Collections;
 import java.util.List;
 
-public class FriendListResponse {
-    public List<FriendResponse> friends = Collections.emptyList();
-
+public record FriendListResponse(List<FriendResponse> friends) {
     public FriendListResponse() {
-    }
-
-    public FriendListResponse(List<FriendResponse> friends) {
-        this.friends = friends;
+        this(Collections.emptyList());
     }
 }

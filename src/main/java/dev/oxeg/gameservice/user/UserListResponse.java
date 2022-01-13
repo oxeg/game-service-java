@@ -1,15 +1,13 @@
 package dev.oxeg.gameservice.user;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import java.util.Collections;
 import java.util.List;
 
-public class UserListResponse {
-    public List<UserResponse> users = Collections.emptyList();
-
+@Schema(title = "List of users")
+public record UserListResponse(List<UserResponse> users) {
     public UserListResponse() {
-    }
-
-    public UserListResponse(List<UserResponse> users) {
-        this.users = users;
+        this(Collections.emptyList());
     }
 }

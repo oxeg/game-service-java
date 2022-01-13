@@ -1,12 +1,7 @@
 package dev.oxeg.gameservice.user;
 
-public class CreateUserRequest {
-    public String name = "";
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-    public CreateUserRequest() {
-    }
-
-    public CreateUserRequest(String name) {
-        this.name = name;
-    }
+@Schema(title = "Request for Creating user")
+public record CreateUserRequest(@Schema(required = true)String name) {
 }

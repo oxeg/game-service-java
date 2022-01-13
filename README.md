@@ -4,6 +4,13 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
+## Database setup
+```postgresql
+create database game_service;
+create user game_service with password 's3cr3t';
+grant all privileges on database game_service to game_service;
+```
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
@@ -11,46 +18,28 @@ You can run your application in dev mode that enables live coding using:
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+## Building and running docker image
+Before building a docker image, replace line in `src/main/resources/application.properties`
+```
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/game_service
+```
+with
+```
+quarkus.datasource.jdbc.url=jdbc:postgresql://host.docker.internal:5432/game_service
+```
 
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
+Build and run docker image
+```
 ./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus/game-service-jvm .
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
+docker run -i --rm -p 8080:8080 quarkus/game-service-jvm
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+## Calling the service
 
-## Creating a native executable
+### Quarkus-generated Swagger-UI
+After running the app, go to http://localhost:8080/q/swagger-ui/ to see controller, requests and responses specifications.
 
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/game-service-java-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Provided Code
-
-### RESTEasy JAX-RS
-
-Easily start your RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+It's also possible to call API endpoints there.

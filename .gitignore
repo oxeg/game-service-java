@@ -37,3 +37,17 @@ nb-configuration.xml
 
 # Local environment
 .env
+
+
+# Created by https://www.toptal.com/developers/gitignore/api/maven
+# Edit at https://www.toptal.com/developers/gitignore?templates=maven
+
+### Maven ###
+pom.xml.next
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+.mvn/wrapper/maven-wrapper.jar
+
+# End of https://www.toptal.com/developers/gitignore/api/maven
