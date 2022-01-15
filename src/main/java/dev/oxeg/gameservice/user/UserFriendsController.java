@@ -49,8 +49,7 @@ public class UserFriendsController {
     @APIResponses(value = {
             @APIResponse(
                     responseCode = "200",
-                    description = "Friend list updated",
-                    content = {@Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = HttpUserResponse.class))}
+                    description = "Friend list updated"
             ),
             @APIResponse(
                     responseCode = "400",
