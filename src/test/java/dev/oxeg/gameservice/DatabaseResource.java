@@ -19,7 +19,9 @@ public class DatabaseResource implements QuarkusTestResourceLifecycleManager {
                 Map.entry("quarkus.flyway.migrate-at-start", "true"),
                 Map.entry("quarkus.datasource.jdbc.url", db.getJdbcUrl()),
                 Map.entry("quarkus.datasource.username", db.getUsername()),
-                Map.entry("quarkus.datasource.password", db.getPassword())
+                Map.entry("quarkus.datasource.password", db.getPassword()),
+                Map.entry("quarkus.hibernate-orm.log.bind-parameters", "true"),
+                Map.entry("quarkus.hibernate-orm.log.sql", "true")
         );
     }
 

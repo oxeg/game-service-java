@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS user_list (
+    id   UUID        NOT NULL PRIMARY KEY,
+    name VARCHAR(64) NOT NULL
+);
+

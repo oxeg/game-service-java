@@ -1,5 +1,8 @@
 package dev.oxeg.gameservice.user;
 
+import dev.oxeg.gameservice.user.httpdata.HttpCreateUserRequest;
+import dev.oxeg.gameservice.user.httpdata.HttpUserListResponse;
+import dev.oxeg.gameservice.user.httpdata.HttpUserResponse;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.http.ContentType;
@@ -18,9 +21,9 @@ import static org.mockito.Mockito.*;
 
 @QuarkusTest
 class UserControllerTest {
-    private static final UserResponse USER_JOHN = new UserResponse(UUID.randomUUID().toString(), "John");
-    private static final UserResponse USER_SARAH = new UserResponse(UUID.randomUUID().toString(), "Sarah");
-    private static final UserListResponse ALL_USERS = new UserListResponse(List.of(USER_JOHN, USER_SARAH));
+    private static final HttpUserResponse USER_JOHN = new HttpUserResponse(UUID.randomUUID(), "John");
+    private static final HttpUserResponse USER_SARAH = new HttpUserResponse(UUID.randomUUID(), "Sarah");
+    private static final HttpUserListResponse ALL_USERS = new HttpUserListResponse(List.of(USER_JOHN, USER_SARAH));
 
     @InjectMock
     private UserService service;
@@ -35,7 +38,7 @@ class UserControllerTest {
     void createUser_returnsBadRequest_whenNameIsNull() {
         var response = given()
                 .contentType(ContentType.JSON)
-                .body(new CreateUserRequest(null))
+                .body(new HttpCreateUserRequest(null))
                 .when()
                 .post("/user");
 
@@ -47,7 +50,7 @@ class UserControllerTest {
     void createUser_returnsBadRequest_whenNameIsEmpty() {
         var response = given()
                 .contentType(ContentType.JSON)
-                .body(new CreateUserRequest(""))
+                .body(new HttpCreateUserRequest(""))
                 .when()
                 .post("/user");
 
@@ -59,13 +62,13 @@ class UserControllerTest {
     void createUser_returnsNewUser_whenNameSet() {
         var response = given()
                 .contentType(ContentType.JSON)
-                .body(new CreateUserRequest(USER_JOHN.name()))
+                .body(new HttpCreateUserRequest(USER_JOHN.name()))
                 .when()
                 .post("/user");
 
         assertEquals(HttpStatus.SC_OK, response.statusCode());
         verify(service, times(1)).createUser(anyString());
-        final var userResponse = response.as(UserResponse.class);
+        final var userResponse = response.as(HttpUserResponse.class);
         assertEquals(USER_JOHN.name(), userResponse.name());
         assertEquals(USER_JOHN.id(), userResponse.id());
     }
@@ -77,6 +80,6 @@ class UserControllerTest {
                 .get("/user");
 
         assertEquals(HttpStatus.SC_OK, response.statusCode());
-        assertDoesNotThrow(() -> response.as(UserListResponse.class));
+        assertDoesNotThrow(() -> response.as(HttpUserListResponse.class));
     }
 }
