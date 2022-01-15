@@ -1,15 +1,13 @@
 package dev.oxeg.gameservice.user;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestScoped
-@Transactional
+@ApplicationScoped
 public class UserRepository {
     @Inject
     EntityManager entityManager;

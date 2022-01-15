@@ -5,6 +5,7 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.StringJoiner;
@@ -20,6 +21,7 @@ public class UserService {
     @Inject
     UserRepository repository;
 
+    @Transactional
     public HttpUserResponse createUser(String name) {
         var entity = repository.create(name);
         LOG.infov("User {0} created with name {1}", entity.getId(), entity.getName());
@@ -48,6 +50,7 @@ public class UserService {
                 .collect(collectingAndThen(Collectors.toList(), HttpUserListResponse::new));
     }
 
+    @Transactional
     public void saveState(UUID userId, HttpUserState userState) {
         var userFound = repository.updateGamesPlayedAndScore(userId, userState.gamesPlayed(), userState.score());
         if (!userFound) {
@@ -55,6 +58,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void saveFriends(UUID userId, List<UUID> friendIds) {
         var uniqueIds = friendIds.stream()
                 .distinct()
