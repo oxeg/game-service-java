@@ -20,16 +20,11 @@ public class UserController {
     UserService service;
 
     @Operation(summary = "Create user")
-    @APIResponses(value = {
-            @APIResponse(
-                    responseCode = "200",
-                    description = "User successfully created. Response content new user id and name",
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User successfully created. Response content new user id and name",
                     content = {@Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = HttpUserResponse.class))}
             ),
-            @APIResponse(
-                    responseCode = "400",
-                    description = "User name is null or empty"
-            )
+            @APIResponse(responseCode = "400", description = "User name is null or empty")
     })
     @POST
     @Consumes(APPLICATION_JSON)
@@ -42,10 +37,8 @@ public class UserController {
     }
 
     @Operation(summary = "Get all users")
-    @APIResponses(value = {
-            @APIResponse(
-                    responseCode = "200",
-                    description = "List of all users",
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "List of all users",
                     content = {@Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = HttpUserListResponse.class))}
             )
     })

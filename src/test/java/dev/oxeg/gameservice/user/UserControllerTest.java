@@ -29,7 +29,7 @@ class UserControllerTest {
     private UserService service;
 
     @BeforeEach
-    void setupService() {
+    void setupUsers() {
         when(service.createUser(anyString())).thenReturn(USER_JOHN);
         when(service.getAllUsers()).thenReturn(ALL_USERS);
     }

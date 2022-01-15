@@ -21,20 +21,12 @@ public class UserStateController {
     UserService service;
 
     @Operation(summary = "Get state for user")
-    @APIResponses(value = {
-            @APIResponse(
-                    responseCode = "200",
-                    description = "User state",
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User state",
                     content = {@Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = HttpUserState.class))}
             ),
-            @APIResponse(
-                    responseCode = "400",
-                    description = "User id is empty of has invalid format"
-            ),
-            @APIResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            )
+            @APIResponse(responseCode = "400", description = "User id has invalid format"),
+            @APIResponse(responseCode = "404", description = "User not found")
     })
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -44,24 +36,15 @@ public class UserStateController {
     }
 
     @Operation(summary = "Update state for user")
-    @APIResponses(value = {
-            @APIResponse(
-                    responseCode = "200",
-                    description = "User state updated"
-            ),
-            @APIResponse(
-                    responseCode = "400",
-                    description = "User id is empty of has invalid format"
-            ),
-            @APIResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            )
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User state updated"),
+            @APIResponse(responseCode = "400", description = "User id has invalid format"),
+            @APIResponse(responseCode = "404", description = "User not found")
     })
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response saveState(@PathParam("id") String id, HttpUserState userState) {
+    public Response updateState(@PathParam("id") String id, HttpUserState userState) {
         var userId = validateUserId(id);
         service.saveState(userId, userState);
         return Response.ok().build();

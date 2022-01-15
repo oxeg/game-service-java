@@ -2,7 +2,6 @@ package dev.oxeg.gameservice.user;
 
 import dev.oxeg.gameservice.user.httpdata.HttpFriendListResponse;
 import dev.oxeg.gameservice.user.httpdata.HttpUpdateFriendsRequest;
-import dev.oxeg.gameservice.user.httpdata.HttpUserResponse;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -23,20 +22,12 @@ public class UserFriendsController {
     UserService service;
 
     @Operation(summary = "Get friend list for user")
-    @APIResponses(value = {
-            @APIResponse(
-                    responseCode = "200",
-                    description = "List of friend data",
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "List of friend data",
                     content = {@Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = HttpFriendListResponse.class))}
             ),
-            @APIResponse(
-                    responseCode = "400",
-                    description = "User id is empty of has invalid format"
-            ),
-            @APIResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            )
+            @APIResponse(responseCode = "400", description = "User id has invalid format"),
+            @APIResponse(responseCode = "404", description = "User not found")
     })
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -46,19 +37,10 @@ public class UserFriendsController {
     }
 
     @Operation(summary = "Update friend list for user")
-    @APIResponses(value = {
-            @APIResponse(
-                    responseCode = "200",
-                    description = "Friend list updated"
-            ),
-            @APIResponse(
-                    responseCode = "400",
-                    description = "User id is empty of has invalid format"
-            ),
-            @APIResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            )
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "Friend list updated"),
+            @APIResponse(responseCode = "400", description = "User id has invalid format"),
+            @APIResponse(responseCode = "404", description = "User not found")
     })
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)

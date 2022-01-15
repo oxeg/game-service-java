@@ -8,7 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 @Readiness
 @ApplicationScoped
-public class ServiceReadyCheck implements HealthCheck {
+public class HttpReadyCheck implements HealthCheck {
     @Override
     public HealthCheckResponse call() {
         return HealthCheckResponse.up("Service is ready");

@@ -25,6 +25,11 @@ public class UserRepository {
     }
 
     List<UserScoreData> findFriendsScores(UUID userId) {
+        var user = entityManager.find(UserEntity.class, userId);
+        if (user == null) {
+            return null;
+        }
+
         var query = entityManager.createNativeQuery("""
                 SELECT u.id, u.name, u.score
                 FROM user_friend f
@@ -38,7 +43,7 @@ public class UserRepository {
 
     List<UserEntity> getAll() {
         var query = entityManager.createQuery("""
-                SELECT u.
+                SELECT u
                 FROM UserEntity u
                 """, UserEntity.class);
         return query.getResultList();

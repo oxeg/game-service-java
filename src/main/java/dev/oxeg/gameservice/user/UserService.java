@@ -6,7 +6,6 @@ import org.jboss.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -35,6 +34,9 @@ public class UserService {
 
     public HttpFriendListResponse getFriendsForUser(UUID userId) {
         var friendList = repository.findFriendsScores(userId);
+        if (friendList == null) {
+            throw userNotFound();
+        }
         return friendList.stream()
                 .map(UserService::scoreDataToFriendsResponse)
                 .collect(collectingAndThen(Collectors.toList(), HttpFriendListResponse::new));
@@ -67,7 +69,7 @@ public class UserService {
         LOG.infov("Updated friends for user {0}: {1}", userId, joiner.toString());
     }
 
-    private static NotFoundException userNotFound() {
+    static NotFoundException userNotFound() {
         return new NotFoundException("User not found");
     }
 
