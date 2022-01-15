@@ -37,9 +37,96 @@ docker build -f src/main/docker/Dockerfile.jvm -t quarkus/game-service-jvm .
 docker run -i --rm -p 8080:8080 quarkus/game-service-jvm
 ```
 
+## Healthcheck endpoints
+There are 2 endpoints available for health check and readiness check
+
+* http://localhost:8080/q/health/ready - checks that http service is ready + database connection is established
+* http://localhost:8080/q/health/live - checks that http service is up and running
+
+Separate endpoint `http://localhost:8080/q/health` shows accumulated health and readiness status.
+It is also available with on UI page `http://localhost:8080/q/health-ui/`.
+
 ## Calling the service
 
-### Quarkus-generated Swagger-UI
+### Generated Swagger-UI
 After running the app, go to http://localhost:8080/q/swagger-ui/ to see controller, requests and responses specifications.
 
 It's also possible to call API endpoints there.
+
+### Manual calls
+Create user
+```shell
+curl -siX POST 'http://localhost:8080/user'  \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "NewUser"
+}'
+```
+Save created user id for future use
+```shell
+NEW_USER_ID=$(curl -sX POST 'http://localhost:8080/user'  \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "NewUser"
+}' | jq -r '.id')
+```
+Save game state
+```shell
+curl -siX PUT "http://localhost:8080/user/$NEW_USER_ID/state"  \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "gamesPlayed": 42,
+    "score": 358
+}'
+```
+Load game state
+```shell
+curl -siX GET "http://localhost:8080/user/$NEW_USER_ID/state"
+```
+Create friend userss for future use
+```shell
+FRIEND_1_ID=$(curl -sX POST 'http://localhost:8080/user'  \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Friend 1"
+}' | jq -r '.id')
+
+curl -siX PUT "http://localhost:8080/user/$FRIEND_1_ID/state"  \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "gamesPlayed": 100,
+    "score": 1000
+}'
+
+FRIEND_2_ID=$(curl -sX POST 'http://localhost:8080/user'  \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Friend 2"
+}' | jq -r '.id')
+
+curl -siX PUT "http://localhost:8080/user/$FRIEND_2_ID/state"  \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "gamesPlayed": 200,
+    "score": 2000
+}'
+```
+Update friends
+```shell
+curl -siX PUT "http://localhost:8080/user/$NEW_USER_ID/friends"  \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "friends": [
+      "'$FRIEND_1_ID'",
+      "'$FRIEND_2_ID'"
+    ]
+}'
+```
+Get friends
+```shell
+curl -siX GET "http://localhost:8080/user/$NEW_USER_ID/friends"
+```
+Get all users
+```shell
+curl -siX GET 'http://localhost:8080/user'
+```

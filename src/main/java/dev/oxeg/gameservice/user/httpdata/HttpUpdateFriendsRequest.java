@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Schema(title = "Request to update friends list")
-public record HttpUpdateFriendsRequest(@Schema(required = true) List<UUID> friends) {
+public record HttpUpdateFriendsRequest(@Schema(required = true, title = "List of friend ids") List<UUID> friends) {
     public HttpUpdateFriendsRequest() {
         this(Collections.emptyList());
     }
